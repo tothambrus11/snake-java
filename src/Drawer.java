@@ -29,8 +29,10 @@ public class Drawer extends PApplet {
         }
         unit = height > width ? width * 0.1f : height * 0.1f;
 
+        snake = new Snake(this, new Position(0,w-1), 0, 5);
         field = new Field(this);
-        snake = new Snake(this, new BodyPart(0,w-1), 0, 5);
+
+        frameRate(20);
     }
 
     public void settings() {
@@ -46,7 +48,7 @@ public class Drawer extends PApplet {
         snake.draw();
 
         if(!snake.isDead){
-            if(frameCount % 40 == 0){
+            if(frameCount % 10 == 0){
                 snake.move();
                 snake.killIfAlreadyDead();
             }
@@ -55,11 +57,13 @@ public class Drawer extends PApplet {
             textAlign(CENTER, CENTER);
             textSize(30);
             text("GAME OVER!", 0, 0, width, height);
-            noLoop();
         }
     }
 
     public void keyPressed(KeyEvent event) {
         snake.keyPressed(event);
+        if(key == 'r'){
+            setup();
+        }
     }
 }

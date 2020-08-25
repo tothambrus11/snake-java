@@ -5,11 +5,12 @@ import java.util.ArrayList;
 
 public class Snake {
     Drawer drawer;
-    ArrayList<BodyPart> tail;
+    ArrayList<Position> tail;
     int dir;
     boolean isDead = false;
+    boolean shouldRemove = true;
 
-    Snake(Drawer drawer, BodyPart startPos, int startDir, int startSize) {
+    Snake(Drawer drawer, Position startPos, int startDir, int startSize) {
         this.drawer = drawer;
         tail = new ArrayList<>();
         tail.add(startPos);
@@ -25,13 +26,13 @@ public class Snake {
         drawer.strokeWeight(Drawer.unit * 0.5f);
         drawer.stroke(200);
         for (int i = 1; i < tail.size(); i++) {
-            BodyPart a = tail.get(i - 1);
-            BodyPart b = tail.get(i);
+            Position a = tail.get(i - 1);
+            Position b = tail.get(i);
 
             if (b.distance(tail.get(i - 1)) == 1) {
                 drawer.line((b.x + 0.5f) * Drawer.unit, (b.y + 0.5f) * Drawer.unit, (a.x + 0.5f) * Drawer.unit, (a.y + 0.5f) * Drawer.unit);
             } else {
-                var delta = new BodyPart(a.x - b.x, a.y - b.y);
+                var delta = new Position(a.x - b.x, a.y - b.y);
                 delta.normalize();
                 var copiedB = b.copy();
                 copiedB.sub(delta);
@@ -43,12 +44,25 @@ public class Snake {
                 drawer.line((copiedA.x + 0.5f) * Drawer.unit, (copiedA.y + 0.5f) * Drawer.unit, (a.x + 0.5f) * Drawer.unit, (a.y + 0.5f) * Drawer.unit);
             }
         }
+
+        drawer.fill(255);
+        drawer.noStroke();
+
+        drawer.text("Score: " + (tail.size() - 5), 0, 0, 200,200);
     }
 
     void move() {
-        tail.remove(0);
+        if(shouldRemove) {
+            tail.remove(0);
+        } else {
+            shouldRemove = true;
+        }
         var temp = tail.get(tail.size() - 1).copy();
         temp.moveDir(dir);
+        if(temp.equals(drawer.field.coinPos)){
+            shouldRemove = false;
+            drawer.field.randomCoinPos();
+        }
 
         tail.add(temp);
     }
@@ -73,7 +87,7 @@ public class Snake {
                 return;
         }
 
-        BodyPart head = getHead().copy();
+        Position head = getHead().copy();
         head.moveDir(tempDir);
         if (!head.equals(tail.get(tail.size() - 2))) {
             dir = tempDir;
@@ -82,12 +96,12 @@ public class Snake {
 
     }
 
-    public BodyPart getHead() {
+    public Position getHead() {
         return tail.get(tail.size() - 1);
     }
 
     public void killIfAlreadyDead() {
-        BodyPart head = getHead();
+        Position head = getHead();
         for (int i = 0; i < tail.size() - 1; i++) {
             if (tail.get(i).equals(head)) {
                 isDead = true;

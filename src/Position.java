@@ -1,9 +1,9 @@
 import java.util.Objects;
 
-public class BodyPart {
+public class Position {
     int x, y;
 
-    public BodyPart(int x, int y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -12,7 +12,7 @@ public class BodyPart {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BodyPart bodyPart = (BodyPart) o;
+        Position bodyPart = (Position) o;
         return x == bodyPart.x &&
                 y == bodyPart.y;
     }
@@ -57,15 +57,15 @@ public class BodyPart {
         }
     }
 
-    BodyPart copy() {
-        return new BodyPart(x, y);
+    Position copy() {
+        return new Position(x, y);
     }
 
-    int distance(BodyPart b) {
+    int distance(Position b) {
         return Math.abs(x - b.x) + Math.abs(y - b.y);
     }
 
-    public void add(BodyPart b) {
+    public void add(Position b) {
         x += b.x;
         y += b.y;
     }
@@ -75,7 +75,7 @@ public class BodyPart {
         y /= y == 0 ? 1 : Math.abs(y);
     }
 
-    public void sub(BodyPart b) {
+    public void sub(Position b) {
         x -= b.x;
         y -= b.y;
     }
