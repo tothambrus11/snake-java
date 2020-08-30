@@ -29,7 +29,7 @@ public class Drawer extends PApplet {
         }
         unit = height > width ? width * 0.1f : height * 0.1f;
 
-        snake = new Snake(this, new Position(0,w-1), 0, 5);
+        snake = new Snake(this, new Position(0, w - 1), 0, 5);
         field = new Field(this);
 
         frameRate(20);
@@ -47,12 +47,12 @@ public class Drawer extends PApplet {
         field.draw();
         snake.draw();
 
-        if(!snake.isDead){
-            if(frameCount % 10 == 0){
+        if (!snake.isDead) {
+            if (frameCount % 10 == 0) {
                 snake.move();
                 snake.killIfAlreadyDead();
             }
-        } else{
+        } else {
             noStroke();
             textAlign(CENTER, CENTER);
             textSize(30);
@@ -62,7 +62,7 @@ public class Drawer extends PApplet {
 
     public void keyPressed(KeyEvent event) {
         snake.keyPressed(event);
-        if(key == 'r'){
+        if (key == 'r') {
             setup();
         }
     }
